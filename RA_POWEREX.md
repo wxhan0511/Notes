@@ -74,10 +74,13 @@ RADB （spi+rgb口） 连 底板左上RGB口
 RAXB HDMI 连 测试板HDMI
 
 GC V4.0 RA 1.0.0.6连接上GC4.0后初始化下载D:\GC4.0_Initial_data\GC3101_GVO646_公版代码_video mode_20250911(1)(2),在Video_START();后加命令SET_AVDD_ON(0);
+
 接口协议：
-![alt text](image-17.png)
+![alt text](pics\image-17.png)
 测试板四个pin连接增强板
 VDDI(HOLD)（iovcc3）1.8，VDDA（VCC2）2.7，AVDD（elvdd4）7,avss-GND
+
+XB电源 MVDD,VDDIO
 
 GC4.0 Rx引脚拉低 增强板检测到RST引脚（直连）拉低，给出AVDD7V、
 User/ra/src/mipi_ra_ops drv_ra_power_on_all_sub_board

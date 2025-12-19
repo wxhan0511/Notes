@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="#stylesheet"?>
+<activity>
+	<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="stylesheet" xml:id="stylesheet">
+		<xsl:output method="html"  encoding="utf-16"/>
+		<!-- Don't reprint text nodes within the xsl:stylesheet node -->
+		<xsl:template match="text()"/>
+		<xsl:template match="activity">
+			<head>
+				<title>Config Setting</title>
+				<style type="text/css">
+					body{ text-align: left; width: 100%;  font-family: Verdana, sans-serif; }
+
+					table{ border: none;  border-collapse: separate;  width: 100%; }
+
+					tr.title td{ font-size: 24px;  font-weight: bold; }
+
+					th{ background: #d0d0d0;  font-weight: bold;  font-size: 10pt;  text-align: left; }
+					tr{ background: #eeeeee}
+					td, th{ font-size: 8pt;  padding: 1px;  border: none; }
+
+					tr.info td{}
+					tr.warning td{background-color:yellow;color:black}
+					tr.error td{background-color:red;color:black}
+
+					span {text-decoration:underline}
+					a:hover{text-transform:uppercase;color: #9090F0;}
+				</style>
+			</head>
+
+			<body>
+				<table>
+					<tr class="title">
+						<td colspan="7">Config</td>
+					</tr>
+					<tr>
+						<td colspan="2">Software version</td>
+						<td colspan="5">2.0.0.134</td>
+					</tr>
+					<tr>
+						<td colspan="2">Host</td>
+						<td colspan="5">ZJ-AE-4363</td>
+					</tr>
+					<tr>
+						<td colspan="2">Device</td>
+						<td colspan="5">0000-0000-0000-0000</td>
+					</tr>
+					<tr>
+						<td colspan="2">Time</td>
+						<td colspan="5">2025/12/18 10:38:56</td>
+					</tr>
+					<!-- <tr>
+						<td colspan="2">warnings</td>
+						<td colspan="5">0</td>
+					</tr> -->
+					<tr>
+						<th width="20">#</th>
+						<th width="50">Type</th>
+						<th width="150">Item</th>
+						<th width="200">Subitem</th>
+						<th width="250">Value</th>
+						<th>Description</th>
+						<!-- <th width="280">GUID</th>
+						<th>Hr</th> -->
+
+						<!-- <th>Time (UTC)</th> -->
+					</tr>
+					<xsl:apply-templates/>
+				</table>
+
+			</body>
+		</xsl:template>
+
+		<xsl:template match="entry">
+			<!-- example 
+
+          <entry>
+            <record>136</record>
+            <time>2004/02/26 00:42:59.706</time>
+            <type>Error</type>
+            <source>Microsoft Visual Studio</source>
+            <description>Loading UI library</description>
+            <guid>{00000000-0000-0000-0000-000000000000}</guid>
+            <hr>800a006f</hr>
+            <path></path>
+        </entry>
+
+        -->
+			<xsl:choose>
+
+				<xsl:when test="type='Information'">
+					<tr id="info" class="info">
+						<td>
+							<xsl:value-of select="record"/>
+						</td>
+						<td></td>
+						<xsl:call-template name="row"/>
+					</tr>
+				</xsl:when>
+
+				<xsl:when test="type='Warning'">
+					<tr id="warning" class="warning">
+						<td>
+							<xsl:value-of select="record"/>
+						</td>
+						<td>Warning</td>
+						<xsl:call-template name="row"/>
+					</tr>
+				</xsl:when>
+
+				<xsl:when test="type='Error'">
+					<tr id="error" class="error">
+						<td>
+							<xsl:value-of select="record"/>
+						</td>
+						<td>ERROR</td>
+						<xsl:call-template name="row"/>
+					</tr>
+				</xsl:when>
+
+			</xsl:choose>
+
+		</xsl:template>
+
+		<xsl:template name="row">
+			<td id="item">
+				<xsl:value-of select="item"/>
+			</td>
+			<td id="subitem">
+				<xsl:value-of select="subitem"/>
+			</td>
+			<td>
+				<xsl:value-of select="value"/>
+			</td>
+			<td id="description">
+				<xsl:value-of select="description"/>
+				<xsl:if test="path">
+					<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<xsl:value-of select="path"/>
+				</xsl:if>
+			</td>
+			<!-- <td id="guid">
+				<xsl:value-of select="guid"/>
+			</td>
+			<td id="hr">
+				<xsl:value-of select="hr"/>
+			</td> -->
+
+			<!-- <td>
+				<xsl:value-of select="time"/>
+			</td> -->
+		</xsl:template>
+
+	</xsl:stylesheet>
+<entry> 
+<record>1</record>
+<item>Power</item>
+<subitem>5v Current/mA</subitem>
+<value>1000</value><type>Information</type>
+<description>Total current and turning off time setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>Power</item>
+<subitem>12v Current/mA</subitem>
+<value>1000</value><type>Information</type>
+<description>Total current and turning off time setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>Power</item>
+<subitem>Turn Off Time/ms</subitem>
+<value>0</value><type>Information</type>
+<description>Total current and turning off time setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>Power</item>
+<subitem>VCC/mV</subitem>
+<value>2800</value><type>Information</type>
+<description>Output voltage setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>Power</item>
+<subitem>IOVCC/mV</subitem>
+<value>1800</value><type>Information</type>
+<description>Output voltage setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>Power</item>
+<subitem>IO/mV</subitem>
+<value>1800</value><type>Information</type>
+<description>Output voltage setting</description>
+</entry>
+<entry> 
+<record>7</record>
+<item>Power</item>
+<subitem>VSN/mV</subitem>
+<value>5800</value><type>Information</type>
+<description>Output voltage setting</description>
+</entry>
+<entry> 
+<record>8</record>
+<item>Power</item>
+<subitem>VSP/mV</subitem>
+<value>6000</value><type>Information</type>
+<description>Output voltage setting</description>
+</entry>
+<entry> 
+<record>9</record>
+<item>Power</item>
+<subitem>VDD/mV</subitem>
+<value>5000</value><type>Information</type>
+<description>Output voltage setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>Power</item>
+<subitem>Type</subitem>
+<value>3</value><type>Information</type>
+<description>Signal voltage setting</description>
+</entry>
+<entry> 
+<record>11</record>
+<item>Power</item>
+<subitem>Voltage/mV</subitem>
+<value></value><type>Information</type>
+<description>Signal voltage setting</description>
+</entry>
+<entry> 
+<record>12</record>
+<item>Power</item>
+<subitem>Current/mA</subitem>
+<value></value><type>Information</type>
+<description>Backlight setting</description>
+</entry>
+<entry> 
+<record>13</record>
+<item>Power</item>
+<subitem>Voltage/mV</subitem>
+<value></value><type>Information</type>
+<description>Backlight setting</description>
+</entry>
+<entry> 
+<record>14</record>
+<item>Power</item>
+<subitem>VCC/mA</subitem>
+<value>2800</value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>15</record>
+<item>Power</item>
+<subitem>IOVCC/mA</subitem>
+<value>1800</value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>16</record>
+<item>Power</item>
+<subitem>VSN/mA</subitem>
+<value>5800</value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>17</record>
+<item>Power</item>
+<subitem>VSP/mA</subitem>
+<value>6000</value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>18</record>
+<item>Power</item>
+<subitem>VDD/mA</subitem>
+<value>5000</value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>19</record>
+<item>Power</item>
+<subitem>Enable</subitem>
+<value></value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>20</record>
+<item>Power</item>
+<subitem>Delay/ms</subitem>
+<value></value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>21</record>
+<item>Power</item>
+<subitem>DelayEnable</subitem>
+<value></value><type>Information</type>
+<description>Supply current alarm setting</description>
+</entry>
+<entry> 
+<record>22</record>
+<item>Power</item>
+<subitem>VCC Enable</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>23</record>
+<item>Power</item>
+<subitem>Power-Off to Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>24</record>
+<item>Power</item>
+<subitem>Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>25</record>
+<item>Power</item>
+<subitem>IOVCC Enable</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>26</record>
+<item>Power</item>
+<subitem>Power-Off to Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>27</record>
+<item>Power</item>
+<subitem>Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>28</record>
+<item>Power</item>
+<subitem>VSN Enable</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>29</record>
+<item>Power</item>
+<subitem>Power-Off to Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>30</record>
+<item>Power</item>
+<subitem>Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>31</record>
+<item>Power</item>
+<subitem>VSP Enable</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>32</record>
+<item>Power</item>
+<subitem>Power-Off to Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>33</record>
+<item>Power</item>
+<subitem>Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>34</record>
+<item>Power</item>
+<subitem>VDD Enable</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>35</record>
+<item>Power</item>
+<subitem>Power-Off to Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>36</record>
+<item>Power</item>
+<subitem>Ground/mS</subitem>
+<value></value><type>Information</type>
+<description>Power-Down Time</description>
+</entry>
+<entry> 
+<record>1</record>
+<item>Timing</item>
+<subitem>Hsync</subitem>
+<value>4</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>Timing</item>
+<subitem>HBP</subitem>
+<value>36</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>Timing</item>
+<subitem>HAdr</subitem>
+<value>720</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>Timing</item>
+<subitem>HFP</subitem>
+<value>28</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>Timing</item>
+<subitem>Vsync</subitem>
+<value>2</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>Timing</item>
+<subitem>VBP</subitem>
+<value>253</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>7</record>
+<item>Timing</item>
+<subitem>VAdr</subitem>
+<value>1600</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>8</record>
+<item>Timing</item>
+<subitem>VFP</subitem>
+<value>10</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>9</record>
+<item>Timing</item>
+<subitem>Pixel Clock/MHz</subitem>
+<value>46</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>Timing</item>
+<subitem>Interface Protocol</subitem>
+<value>MIPI_DPHY_Video</value><type>Information</type>
+<description>Display Timing Setting</description>
+</entry>
+<entry> 
+<record>1</record>
+<item>Pattern</item>
+<subitem>ImageSwitchMode</subitem>
+<value>1</value><type>Information</type>
+<description>0：自动切图，1：手动切图</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>Pattern</item>
+<subitem>ImageSwitchTime</subitem>
+<value>1000</value><type>Information</type>
+<description>自动切图时间(mS)</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>Pattern</item>
+<subitem>EdgeTriggered</subitem>
+<value>10</value><type>Information</type>
+<description>触发时间(uS)</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>Pattern</item>
+<subitem>White</subitem>
+<value>-</value><type>Information</type>
+<description>Pixel1: FFFFFF; </description>
+</entry>
+<entry> 
+<record>4</record>
+<item>Pattern</item>
+<subitem>Pixel Line</subitem>
+<value>-</value><type>Information</type>
+<description>Pixel1: 800080; Pixel2: 008000; PixelLineType: 1 Dot; </description>
+</entry>
+<entry> 
+<record>5</record>
+<item>Pattern</item>
+<subitem>Red</subitem>
+<value>-</value><type>Information</type>
+<description>Pixel1: FF0000; </description>
+</entry>
+<entry> 
+<record>6</record>
+<item>Pattern</item>
+<subitem>Green</subitem>
+<value>-</value><type>Information</type>
+<description>Pixel1: 00FF00; </description>
+</entry>
+<entry> 
+<record>1</record>
+<item>InterfaceSPI</item>
+<subitem>CMDWidth</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>InterfaceSPI</item>
+<subitem>CSHen</subitem>
+<value>0x00</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>InterfaceSPI</item>
+<subitem>CSLdelay</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>InterfaceSPI</item>
+<subitem>CSHdelay</subitem>
+<value>0x04</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>InterfaceSPI</item>
+<subitem>CPHA</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>InterfaceSPI</item>
+<subitem>CPOL</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>7</record>
+<item>InterfaceSPI</item>
+<subitem>Receivedelay</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>8</record>
+<item>InterfaceSPI</item>
+<subitem>Receivedelayen</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>9</record>
+<item>InterfaceSPI</item>
+<subitem>Lowclken</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>InterfaceSPI</item>
+<subitem>Formatchoice</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>11</record>
+<item>InterfaceSPI</item>
+<subitem>Pixelcmd</subitem>
+<value>0x2C</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>12</record>
+<item>InterfaceSPI</item>
+<subitem>Pixelcmdnum</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceSPI Setting</description>
+</entry>
+<entry> 
+<record>1</record>
+<item>InterfaceMCU</item>
+<subitem>CSHen</subitem>
+<value>0x00</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>InterfaceMCU</item>
+<subitem>CSLdelay</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>InterfaceMCU</item>
+<subitem>CSHdelay</subitem>
+<value>0x04</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>InterfaceMCU</item>
+<subitem>Firstwidth</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>InterfaceMCU</item>
+<subitem>Endwidth</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>InterfaceMCU</item>
+<subitem>WRSwidth</subitem>
+<value>0x00</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>7</record>
+<item>InterfaceMCU</item>
+<subitem>I80m68</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>8</record>
+<item>InterfaceMCU</item>
+<subitem>III</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>9</record>
+<item>InterfaceMCU</item>
+<subitem>Cmdbitwidth</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>InterfaceMCU</item>
+<subitem>Databitwidth</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>11</record>
+<item>InterfaceMCU</item>
+<subitem>Dummyreadnum</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>12</record>
+<item>InterfaceMCU</item>
+<subitem>Dummyreaden</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>13</record>
+<item>InterfaceMCU</item>
+<subitem>rgblocation</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>14</record>
+<item>InterfaceMCU</item>
+<subitem>RDClock</subitem>
+<value>10</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>15</record>
+<item>InterfaceMCU</item>
+<subitem>WRClock</subitem>
+<value>10</value><type>Information</type>
+<description>Display InterfaceMCU Setting</description>
+</entry>
+<entry> 
+<record>1</record>
+<item>InterfaceQSPI</item>
+<subitem>CPHA</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>InterfaceQSPI</item>
+<subitem>CPOL</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>InterfaceQSPI</item>
+<subitem>CSLdelay</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>InterfaceQSPI</item>
+<subitem>Headlinewidth</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>InterfaceQSPI</item>
+<subitem>EmptyPeriod1</subitem>
+<value>0x08</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>InterfaceQSPI</item>
+<subitem>Cmdlinewidth</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>7</record>
+<item>InterfaceQSPI</item>
+<subitem>EmptyPeriod2</subitem>
+<value>0x08</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>8</record>
+<item>InterfaceQSPI</item>
+<subitem>Data_line_width</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>9</record>
+<item>InterfaceQSPI</item>
+<subitem>SDISelect</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>InterfaceQSPI</item>
+<subitem>EmptyPeriod1pixel</subitem>
+<value>0x08</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>11</record>
+<item>InterfaceQSPI</item>
+<subitem>Cmdlinewidthpixel</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>12</record>
+<item>InterfaceQSPI</item>
+<subitem>EmptyPeriod2pixel</subitem>
+<value>0x08</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>13</record>
+<item>InterfaceQSPI</item>
+<subitem>Datalinewidthpixel</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>14</record>
+<item>InterfaceQSPI</item>
+<subitem>Receivedelayen</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>15</record>
+<item>InterfaceQSPI</item>
+<subitem>Formatchoice</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>16</record>
+<item>InterfaceQSPI</item>
+<subitem>HeadPixel</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>17</record>
+<item>InterfaceQSPI</item>
+<subitem>HeadPixelset</subitem>
+<value>0x00</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>1</record>
+<item>InterfaceRGB</item>
+<subitem>enableen</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceRGB Setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>InterfaceRGB</item>
+<subitem>vsyncHL</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceRGB Setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>InterfaceRGB</item>
+<subitem>hsyncHL</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceRGB Setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>InterfaceRGB</item>
+<subitem>enableHL</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceRGB Setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>InterfaceRGB</item>
+<subitem>dotclkRF</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceRGB Setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>InterfaceRGB</item>
+<subitem>Formatchoice</subitem>
+<value>0x03</value><type>Information</type>
+<description>Display InterfaceRGB Setting</description>
+</entry>
+<entry> 
+<record>1</record>
+<item>InterfaceMIPI</item>
+<subitem>CBM</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>2</record>
+<item>InterfaceMIPI</item>
+<subitem>EOT</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>3</record>
+<item>InterfaceMIPI</item>
+<subitem>EHS</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>4</record>
+<item>InterfaceMIPI</item>
+<subitem>PNB</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>5</record>
+<item>InterfaceMIPI</item>
+<subitem>XEQ</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>6</record>
+<item>InterfaceMIPI</item>
+<subitem>NVB</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>7</record>
+<item>InterfaceMIPI</item>
+<subitem>ECD</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>8</record>
+<item>InterfaceMIPI</item>
+<subitem>NVD</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>9</record>
+<item>InterfaceMIPI</item>
+<subitem>BLLP</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>InterfaceMIPI</item>
+<subitem>VBN</subitem>
+<value>0x00</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>11</record>
+<item>InterfaceMIPI</item>
+<subitem>VFN</subitem>
+<value>0x00</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>12</record>
+<item>InterfaceMIPI</item>
+<subitem>VCS</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>13</record>
+<item>InterfaceMIPI</item>
+<subitem>HCLK</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>14</record>
+<item>InterfaceMIPI</item>
+<subitem>CKE</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>15</record>
+<item>InterfaceMIPI</item>
+<subitem>LP_Speed_Limit_en</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>16</record>
+<item>InterfaceMIPI</item>
+<subitem>Speed_Max</subitem>
+<value>9.0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>17</record>
+<item>InterfaceMIPI</item>
+<subitem>Compression_Send_en</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>18</record>
+<item>InterfaceMIPI</item>
+<subitem>COMP_SLICE</subitem>
+<value>0x01</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>19</record>
+<item>InterfaceMIPI</item>
+<subitem>Formatchoice</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+</activity>
