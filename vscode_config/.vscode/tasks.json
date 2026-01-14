@@ -1,0 +1,79 @@
+{
+     /*💡 all relative tool is in D:\\tool_chain*/
+    "version": "2.0.0", 
+    "tasks": [
+        {
+            "type": "cmake", 
+            "label": "CMake: clean",
+            "command": "clean",
+            "problemMatcher": [],
+            "detail": "CMake template clean task"
+        },
+        {
+            "label": "OpenOCD",
+            "type": "shell",
+            "command": "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\bin\\openocd.exe",
+            "args": [
+                "-f",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\interface\\stlink.cfg",
+                "-f",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\target\\stm32f4x.cfg",
+                "-c",
+                "program build/build.elf verify reset exit"
+                
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "OpenOCD task to flash the firmware"
+        },
+        /*
+        openocd debug task
+        ⚠️ note that the elf file path and name here should be consistent with your project
+        */
+        {
+            "label": "OpenOCD Debug",
+            "type": "shell",
+            "command": "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\bin\\openocd.exe",
+            "args": [
+                "-f",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\interface\\stlink.cfg",
+                "-f",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\target\\stm32f4x.cfg",
+                "-c",
+                "gdb_port pipe; tcl_port pipe; telnet_port 4444; init; reset halt; flash write_image erase build/build.elf; reset run; exit"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "OpenOCD task to debug the firmware"
+        },
+        /*
+        Download Firmware task
+        ⚠️ note that the elf file path and name here should be consistent with your project
+        */
+        {
+            "label": "Download Firmware",
+            "type": "shell",
+            "command": "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\bin\\openocd.exe",
+            "args": [
+                "-f",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\interface\\stlink.cfg",
+                "-f",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\target\\stm32f4x.cfg",
+                "-c",
+                "program build/build.elf verify reset exit"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Download firmware to the microcontroller"
+        }
+    ]
+}     

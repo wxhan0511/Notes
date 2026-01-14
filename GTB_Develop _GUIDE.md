@@ -1,10 +1,10 @@
 # GTB Develop GUIDE
 
-## STM32 specifies UID and PID
+## 1. The PID and UID need to be specified to connect
 ![alt text](pics/GTB/image-28.png)
 
-## Transplant from User\thread\src\server_gtb.c
-
+## 2. Transplant from User\thread\src\server_gtb.c
+### 2.1 GC4.0 Lcd_AE_Test_Board fw USB communication function
 GC4.0底板
 USB send 
 HOST to DEVICE
@@ -14,44 +14,49 @@ USB receive
 DEVICE_TO_HOST
 USBD_HID_GetReportTrigger
 
+## 3. GC7272不同状态下电压电流
+![alt text](pics/GTB/GC7272_电压电流IC状态对照表_sleepin可烧_displayon可报点.png) 
 
-## GTB 报点 config
+## 4. GTB 报点 config
 
-### GTB version
+## GTB version
 ![alt text](pics/GTB/3.png)
-### 初始化代码
+### 1.初始化代码
 Notes\GTB\7272+BOE_longV验证代码20230413_70M_4.0.zip
-### BIN
+### 2. BIN
 Notes\GTB\GC7272.bin
-### 电压电流
+### 3. 电压电流
 ![alt text](pics/GTB/Snipaste_2025-12-16_09-41-28.png)
-### 屏
+### 4. 屏
 ![alt text](pics/GTB/lQDPKeC-T8_wJvPNB4DNBaCwi0O6aTjCLOcJC97To7wYAA_1440_1920.jpg)
-### 底板固件
+### 5. 底板固件
 Notes\GTB\AE_Tool_Firmware_0538090A.bin
-### step1
+### 6. step1
 ![alt text](pics/GTB/1.png)
-### step2 按waitkey 屏幕亮
-### step3 报点
+### 7. step2 按waitkey 屏幕亮
+### 8. step3 报点
 ![alt text](pics/GTB/2.png)
-### attention
-1、增大 底板参数USBD_HID0_EP_INT_OUT_BINTERVAL,
-如改为 10,可以稳定program
 
-#### 铁哥给的屏幕
-![alt text](pics/GC7272_电压电流IC状态对照表_sleepin可烧_displayon可报点.png)
-##### GC4.0上位机配置
+## 5. 日月同芯3#(铁哥给的屏幕(7272报点))
+
+### 1. GC4.0上位机配置
 ![alt text](pics/GTB/image.png)
+#### 1.1 initial code
 D:\Notes\GTB\for_GC7272_NSBIN
+#### 1.3 bin
 D:\Notes\GTB\GC7272_NS.bin
-#####
-屏幕亮可报点
-启动和报点前电压电流
+
+### 2. 启动和报点前电压电流
 见
 <video controls src="pics/GTB/iwEcAqNtcDQDAQQABQAGsG68w1ncKhfSCR173yNBAwAH0iinXrsIAAmiaW0KAAvSAATTKw.mp4" title="Title"></video> 
 <video controls src="pics/GTB/iwEcAqNtcDQDAQQABQAGsKwDE0bO1TkhCR174ZKbLwAH0iinXrsIAAmiaW0KAAvSAAoauQ.mp4" title="Title"></video>
  ![alt text](pics/GTB/lQDPJx2krAbFRpvNBQDNA8GwacnzLiP5jFQJHXviRDAKAA_961_1280.jpg) 
  ![alt text](pics/GTB/lQDPKGwZaZqmVJvNBQDNA8GwIQdYpUUrRAcJHXvf4ZXTAA_961_1280.jpg)
+
+### 6. attention
+1. 增大 底板参数USBD_HID0_EP_INT_OUT_BINTERVAL,
+如改为 10,可以稳定program
+2. 修改SPI分频 84M/256 ,烧录和报点比较稳定
 
 
 ## 通过GTB板进行SPI烧录3101COB

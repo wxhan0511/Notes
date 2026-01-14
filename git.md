@@ -1,26 +1,20 @@
 ## GitHub 加速神器
 eg. 
 git clone https://gitclone.com/github.com/STMicroelectronics/stm32-usbx-examples.git
-## SSH KEY(Secure Shell protocol) 适用于linux
-1、下载
+## SSH KEY(Secure Shell protocol)
+### 1、下载
 Git-2.51.2-64-bit.exe适用于windows
-2、生成公钥和私钥
+### 2、生成公钥和私钥
 ssh-keygen -t ed25519 -C "wxhan0511@outlook.com"
 这里的-t参数用于指定密钥对的签名算法，-C参数后面输入你的邮箱地址作为注释，方便日后识别这个公钥。
 windows下保存路径如下
 Your identification has been saved in /c/Users/A0004363/.ssh/id_ed25519
 Your public key has been saved in /c/Users/A0004363/.ssh/id_ed25519.pub
-3、公钥复制到github中
+### 3、公钥复制到github中
 接下来，系统会要求你输入密钥对的密码，如果不希望设置密码，直接回车即可。创建完成后，私钥内容需要自己妥善保存，不要泄露给他人。
 然后，你需要将公钥内容粘贴到GitHub中。登录到你的GitHub或Gitee账户，在个人设置中找到“安全设置”–“SSH公钥”，将公钥内容粘贴到相应的位置，并保存设置
-4、git remote add origin xxx（SSH链接）
-5、加密算法保护原理（ed25519。。。）公钥用作加密，私钥则用作解密。下面反的
-    A[你电脑] -->|1. 发起连接| B(GitHub服务器)
-    B -->|2. 发来随机挑战码| A
-    A -->|3. 用私钥加密挑战码| A
-    A -->|4. 发回加密结果| B
-    B -->|5. 用公钥解密，验证通过| B
-    B -->|6. 允许 push| A
+### 4、git remote add origin xxx（SSH链接）
+
 ## 保存密码
 git config --global credential.helper wincred
 让 Git 使用 Windows 的“凭据管理器”（wincred）来保存和自动填写你的 Git 远程仓库账号和密码（或 Token）。

@@ -1,0 +1,25 @@
+{
+    "cmake.generator": "Ninja",
+    /*
+    q: What role does this line play
+    a: This line is used to exclude files in a specific path, causing these files to be ignored in the file browser
+    q:** /. What does it mean
+    a:** / indicates matching files or directories in any directory, and.history indicates a specific directory name
+    */
+    "files.exclude": {
+        "**/.history": true
+    },
+    /*
+    q: What role does this line play
+    a: This line is used to exclude files in a specific path, causing these files to be ignored in search and file operations
+    q: What is the difference between this and the above files.exclude
+    a: This configuration is for excluding files in search functionality, mainly to ignore files in specific paths during search, while files.exclude is used to hide these files in the file browser
+    */
+    "search.exclude": {
+        "**/.history": true,
+        "**/*.md": true,
+    },
+    
+    "cortex-debug.variableUseNaturalFormat": false,
+
+}

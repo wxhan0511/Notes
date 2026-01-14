@@ -1,0 +1,38 @@
+{
+
+  /*💡 all relative tool is in D:\\tool_chain*/
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "cwd": "${workspaceRoot}",
+      "type": "cortex-debug",
+      "request": "launch",
+      "name": "OpenOCD",
+      "servertype": "openocd",
+      "serverpath": "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\bin\\openocd.exe",
+      "executable": "./build/build.elf",
+      "configFiles": [
+          "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\interface\\stlink.cfg",
+          "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\target\\stm32f4x.cfg",
+      ],
+      "svdFile": "D:\\tool_chain\\SVD\\STM32F407.svd"
+    },
+    {
+    //openocd debug task
+    //⚠️ note that the elf file path and name here should be consistent with your project
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/build.elf",
+            "name": "Debug Microcontroller",
+            "request": "launch",
+            "type": "cortex-debug",
+            "showDevDebugOutput": false,
+            "servertype": "openocd",
+            "configFiles": [
+                "cmsis-dap.cfg",
+                "D:\\tool_chain\\xpack-openocd-0.12.0-6-win32-x64\\xpack-openocd-0.12.0-6\\openocd\\scripts\\target\\stm32f4x.cfg",
+            ],
+            "svdFile": "D:\\tool_chain\\SVD\\STM32F407.svd"
+            
+        }
+    ]
+}

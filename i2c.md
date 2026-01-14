@@ -1,5 +1,5 @@
 # STM32设置为I2C从机模式（HAL库版本）
-
+参考链接:https://blog.csdn.net/ShenZhen_zixian/article/details/131395791
 ## 1、初始化I2C配置
 注：除了最后的HAL_I2C_EnableListen_IT()函数，其他代码都可以用STM32CubeMX自动生成
 参考代码：
@@ -19,10 +19,48 @@ static void MX_I2C1_Init(void)
   {                                                      
     Error_Handler();                                                      
   }                                                      
-  //状态：HAL_I2C_STATE_LISTEN      ACK地址，使能I2C_IT_EVT和I2C_IT_ERR中断
-  //
   HAL_I2C_EnableListen_IT(&hi2c1);
 }
+```
+### 监听中断触发条件
+
+### ACK bit
+Acknowledge returned after a byte is received (matched address or data)
+### NOSTRETCH(Slave mode)
+This bit is used to disable clock stretching in slave mode when ADDR or BTF flag is set, until
+it is reset by software
+### 事件中断触发条件
+ITEVTEN,This interrupt is generated when:
+#### SB = 1 (Master) 
+//– Set when a Start condition generated.– 
+//Cleared by software by reading the SR1 register followed by writing the DR register, or byhardware when PE=0
+#### ADDR = 1 (Master/Slave)
+//Slave:Set by hardware as soon as the received slave address matched with the OAR registers
+//Master: For 7-bit addressing, the bit is set after the ACK of the address byte
+#### ADD10= 1 (Master)
+#### STOPF = 1 (Slave)
+– Set by hardware when a Stop condition is detected on the bus by the slave after an
+acknowledge (if ACK=1).
+– Cleared by software reading the SR1 register followed by a write in the CR1 register, or by
+hardware when PE=0
+#### BTF
+– In reception when a new byte is received (including ACK pulse) and DR has not been read
+yet (RxNE=1).
+– In transmission when a new byte should be sent and DR has not been written yet (TxE=1)
+#### TxE
+is not set during address phase.
+#### RxNE
+is not set during address phase.
+
+ITERREN
+This interrupt is generated when:
+– BERR = 1
+– ARLO = 1
+– AF = 1
+– OVR = 1
+– PECERR = 1
+– TIMEOUT = 1
+– SMBALERT = 1
 ```
 ## 2、初始化I2C引脚和中断
 参考代码：
