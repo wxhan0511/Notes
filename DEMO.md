@@ -1,5 +1,4 @@
-这里是获取各系列 STM32 Demo 库的最快路径与目录结构要点：
-
+ bvbbgvbgvbvgbnhvg# STM32 Demo 库
 一、官方 STM32Cube MCU 包（含 HAL/LL、BSP、Examples、Applications、Demos）
 
 入口页（按系列下载）:

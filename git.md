@@ -1,4 +1,4 @@
-## GitHub 加速神器
+## GitHub 加速
 eg. 
 git clone https://gitclone.com/github.com/STMicroelectronics/stm32-usbx-examples.git
 ## SSH KEY(Secure Shell protocol)
@@ -36,7 +36,6 @@ git branch -vv
 git remote -v 
 ## git忽略CRLF警告
 git config --global core.safecrlf false
-
 ## 上传
 git pull origin main 其中 origin 是远程仓库名，main 是分支名。
 git log origin/main..main 查看本地分支比远程多的提交（ahead）
@@ -64,13 +63,11 @@ git clone：克隆（下载）一个Git仓库到本地。
 -b <branch>：指定要克隆的分支（branch），不是默认的master/main分支。例如 -b develop 表示克隆 develop 分支。
 ## 提交
 git commit -m "首次提交项目代码"
-
 ## 新建分支
 git branch 新分支名
 git switch -c dev
 git checkout -b dev
 git checkout -b dev 
-
 ## 组织
 主要分支约定（必须有）
 main（或 master）：生产/发布分支，始终可发布 — 受保护（禁止直接 push，必须 PR + CI 通过）。
