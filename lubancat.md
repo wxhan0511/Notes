@@ -1,4 +1,5 @@
-# 鲁班猫4 EBF410116V1R0
+# 鲁班猫版本
+背面右下角
 
 ![alt text](lubancat/image-1.png)
 ![alt text](lubancat/image-2.png)
@@ -31,7 +32,7 @@ Rockchip Pin的ID按照 控制器(bank)+端口(port)+索引序号(pin) 组成。
 GPIO1_C4表达的意思为第1组控制器，端口号为C，索引号为4。该引脚号的计算公式为32 x 1 + 2 x 8 + 4 = 52
 
 ## 外设控制
-### IO
+### IO配置
 eg
 pin7为32×0+0×8+7 GPIO0_A7
 
@@ -53,6 +54,9 @@ echo 1 > /sys/class/gpio/gpio52/value
 
 #复位引脚
 echo 52 > /sys/class/gpio/unexport
+#### 查看所有已配置的 PIN 状态
+sudo cat /sys/kernel/debug/pinctrl/pinctrl-rockchip-pinctrl/pinmux-pins
+
 ### spi
 vi /boot/uEnv/board.txt
 将带有 xxx-spix-mx-overlay.dtbo 的两行的注释符号去掉
@@ -72,3 +76,7 @@ ls /dev/spi*
 运行：lua.execute(code) 开始运行你的 Lua 脚本。
 中转：Lua 调 power:set_xxx -> 触发 LockedHalProxy -> 拿到互斥锁 -> 调 hal_power.py。
 落地：你的 hal_power.py 通过 SpiDriver 向 SPI 线路发送物理电信号。
+
+
+## 日志
+logger.error(f"HAL initialization failed: {e}") # <--- 你的报错日志就是这里打印的
