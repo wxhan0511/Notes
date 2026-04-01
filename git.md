@@ -86,3 +86,33 @@ release/<version>：发布准备分支（从 develop 切出，做版本稳定、
 版本与 Tag
 发布用语义化版本：vMAJOR.MINOR.PATCH（例如 v1.2.0）。
 发布流程：release/<ver> -> 完成后合并到 main -> git tag -a v1.2.0 -m "release v1.2.0" -> push tag。
+
+## 切换历史版本
+git clone https://github.com/用户名/仓库名.git
+cd 仓库名
+git checkout <commit-hash>
+
+## 修改注释
+git checkout master  进入当前分支
+git reset --hard fdf3b3b  回到最新版本
+git rebase -i HEAD~3  显示最近几(3)个注释
+在弹出的窗口里，确保能看到你想改的那个 commit，以及它后面的所有 commits。只把你想改的那行 pick 换成 reword，其他的 pick 不要动
+git push origin master --force 推送到远程
+
+
+## vscode源代码管理
+在 VS Code 的 Git 源代码管理面板中，这几个选项的区别如下：
+
+提交 (Commit):
+将你暂存的更改保存到本地仓
+
+库。这只是在本地创建一个快照，不会影响远程服务器。
+
+提交 (修改) (Commit (Amend)):
+将当前的更改合并到上一次提交中，而不是创建一个新的提交。通常用于修复上一个提交中的小错误或修改提交信息。
+
+提交和推送 (Commit & Push):
+先执行本地提交，然后立即将本地分支的提交上传到远程仓库（如 GitHub 或 GitLab）。
+
+提交和同步 (Commit & Sync):
+先执行本地提交，然后执行“同步”操作。同步通常包括从远程仓库拉取 (Pull) 最新的更改，然后再将你的本地更改推送 (Push) 到远程。这可以确保你的本地代码与服务器保持一致。
