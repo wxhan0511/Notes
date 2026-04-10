@@ -1,9 +1,10 @@
-# 鲁班猫版本
+## 鲁班猫版本
 背面右下角
 
 ![alt text](lubancat/image-1.png)
 ![alt text](lubancat/image-2.png)
 ![alt text](lubancat/image-3.png)
+## 登录
 用户  --- 用户名 -- 密码
 超级用户 - root -- root
 普通用户 - cat  -- temppwd
@@ -22,17 +23,27 @@ RK3588 采用 8nm 制程工艺，性能强劲且功耗低：
 ‌视频能力‌：
 解码：8K@60fps（H.265/VP9）、4K@60fps（AV1）。
 编码：8K@30fps（H.264/H.265）
-##
-SPI应用层,直接调驱动
-## pin定义
-![alt text](lubancat/image-5.png)
+
+
+
+## 外设控制
+### IO配置
+#### pin定义
+![alt text](lubancat/pin_def.png)
 rk3588具有5个GPIO控制器，每个控制器可以控制32(A=0,B=1,C=2,D=3,8个索引号)个IO
 
 Rockchip Pin的ID按照 控制器(bank)+端口(port)+索引序号(pin) 组成。
 GPIO1_C4表达的意思为第1组控制器，端口号为C，索引号为4。该引脚号的计算公式为32 x 1 + 2 x 8 + 4 = 52
 
-## 外设控制
-### IO配置
+编号是 控制器×32+端口×8+num,如
+代码里
+self.io_bus = GpioDriver("0") ## io控制器0
+elf.ready_line_num = 16 ## 该控制器上的第16个引脚
+self.io_bus.request_input(self.ready_line_num, consumer="meter_ready")
+就是GPIO0_C0
+
+物理引脚就是实际的物理pin序
+### IO操作
 eg
 pin7为32×0+0×8+7 GPIO0_A7
 
@@ -80,3 +91,30 @@ ls /dev/spi*
 
 ## 日志
 logger.error(f"HAL initialization failed: {e}") # <--- 你的报错日志就是这里打印的
+
+
+## GCV5 SERVICE使用方法及硬件连接
+
+### SPI要开启
+sudo fire-config
+选中外设
+使用方向键移动光标到 SPI 。
+按 “空格键” 选中SPI-CS(出现 “*” )，如下图。
+按 “确认键” 进行设置。
+按 “Esc键” 退出到终端，运行 sudo reboot 进行重启应用。
+SPI0
+CS是CS0
+### SPI传输 Ready 信号引脚
+Ready 信号引脚 编号16脚要拉高
+
+### SPI连线
+从1脚开始数第10,11,12个脚分别是MOSI,MISO,CLK
+从40脚数第9个是cs脚
+从1脚数第4个是同步IO脚
+39是地
+
+连5.0
+M_INT pin是同步IO,高空闲
+key1是cs
+KEY2是SCK
+MISO,MOSI不变
