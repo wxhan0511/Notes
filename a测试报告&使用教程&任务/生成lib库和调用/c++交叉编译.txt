@@ -1,0 +1,101 @@
+可以，按下面这套走就能打出静态库并在 main.c 调用。
+
+**先确认两件事**
+1. 库里不要包含带 main 的示例文件，比如 ThirdParty/GCGTMain/src/gcgtmain1.cpp。  
+2. GCGTMain.h 目前是“声明+实现都在头文件里”，可以用，但更推荐把实现放到 GCGTMain.cpp，头文件只留声明，避免重复定义问题。
+
+**1. 生成 .lib（GNU ar 格式）**
+在工程根目录执行：
+
+```powershell
+arm-none-eabi-g++ -c .\ThirdParty\GCGTMain\src\GCGTMain.cpp -I.\ThirdParty\GCGTMain\include -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -Os -ffunction-sections -fdata-sections -o .\ThirdParty\GCGTMain\lib\GCGTMain.o
+
+arm-none-eabi-ar rcs .\ThirdParty\GCGTMain\lib\GCGTMain.lib .\ThirdParty\GCGTMain\lib\GCGTMain.o
+```
+
+可选检查：
+```powershell
+arm-none-eabi-nm .\ThirdParty\GCGTMain\lib\GCGTMain.lib
+```
+
+**2. 给 main.c 准备 C 包装层**
+因为 main.c 是 C，不能直接调 C++ 类。需要一层 extern "C" 包装。
+
+新增一个 C 头（例如 GCGTMain_c.h）：
+```c
+#ifndef GCGTMAIN_C_H
+#define GCGTMAIN_C_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int GCGT_RunOnce(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+```
+
+新增一个 C++ 包装实现（例如 GCGTMain_c.cpp）：
+```cpp
+#include "GCGTMain.h"
+#include <vector>
+
+static double MeasureCb(int) { return 0.0; }
+static bool WriteCb(int, int, int, int, bool) { return true; }
+
+extern "C" int GCGT_RunOnce(void)
+{
+    GCGTMain::GCNGTClass algo;
+    std::vector<double> inputLv(30, 0.0);
+    std::vector<int> inputReg(15, 0);
+    std::vector<int> outReg;
+
+    algo.GammaTuning_Enhance("GC7274", 2.2, inputLv, inputReg, outReg, &MeasureCb, &WriteCb);
+    return (int)outReg.size();
+}
+```
+
+**3. 在 CMake 里链接库并启用 C++ 链接**
+在 CMakeLists.txt 增加：
+
+```cmake
+add_library(GCGTMain STATIC IMPORTED)
+set_target_properties(GCGTMain PROPERTIES
+    IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ThirdParty/GCGTMain/lib/GCGTMain.lib
+)
+
+target_include_directories(build.elf PRIVATE
+    ${CMAKE_SOURCE_DIR}/ThirdParty/GCGTMain/include
+)
+
+# 把包装层 cpp 编进最终目标（路径按你实际放置位置）
+target_sources(build.elf PRIVATE
+    ${CMAKE_SOURCE_DIR}/ThirdParty/GCGTMain/src/GCGTMain_c.cpp
+)
+
+target_link_libraries(build.elf PRIVATE GCGTMain stdc++)
+set_target_properties(build.elf PROPERTIES LINKER_LANGUAGE CXX)
+```
+
+**4. 在 main.c 调用**
+在 main.c 的 include 区加：
+```c
+#include "GCGTMain_c.h"
+```
+
+在初始化后调用：
+```c
+volatile int gtgt_ret = GCGT_RunOnce();
+```
+
+**5. 重新配置与编译**
+```powershell
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=arm-none-eabi-g++
+cmake --build build -j
+```
+
+如果你愿意，我可以下一步按你当前 CMakeLists.txt 现状给你“可直接粘贴的最小改动版”，避免和你现有 GLOB/source 规则冲突。

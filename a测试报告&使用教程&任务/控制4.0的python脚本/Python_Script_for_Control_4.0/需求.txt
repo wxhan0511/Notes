@@ -1,0 +1,1 @@
+控制4.0的python脚本精简成一个给我，要求是要ssdsend、ssdread、读电流、读电源与24pin电压、读24pin频率

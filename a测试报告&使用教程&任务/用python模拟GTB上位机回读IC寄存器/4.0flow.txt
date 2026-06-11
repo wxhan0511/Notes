@@ -1,0 +1,135 @@
+uint8_t idm_key[64] =
+    {
+        0x70,0xb8,0x5c,0x2e,0x17,0x0b,0x05,0x02,
+        0x81,0xc0,0x60,0x30,0x98,0x4c,0x26,0x13,
+        0x09,0x84,0x42,0xa1,0xd0,0xe8,0x74,0x3a,
+        0x9d,0x4e,0xa7,0x53,0x29,0x14,0x0a,0x05,
+        0x02,0x81,0x40,0xa0,0xd0,0xe8,0xf4,0xfa,
+        0x7d,0x3e,0x9f,0x4f,0xa7,0x53,0x29,0x14,
+        0x0a,0x05,0x82,0xc1,0xe0,0xf0,0xf8,0xfc,
+        0xfe,0xff,0x7f,0x3f,0x9f,0xcf,0xe7,0x73
+    };
+
+void gtb_i2c_enter_idm(const uint8_t addr)
+{
+    uint8_t write_data[10] = {};
+
+    i2c_write_data(addr,idm_key,64);
+
+    write_data[0] = 0x0f;
+    write_data[1] = 0xf0;
+    i2c_write_data(addr,write_data,2);
+
+    write_data[0] = 0x04;
+    write_data[1] = 0xfb;
+    write_data[2] = 0xc0;
+    write_data[3] = 0x00;
+    write_data[4] = 0x00;
+    write_data[5] = 0x90;
+    i2c_write_data(addr,write_data,6);
+
+    write_data[0] = 0x64;
+    write_data[1] = 0x00;
+    write_data[2] = 0x10;
+    write_data[3] = 0x00;
+    i2c_write_data(addr,write_data,4);
+
+    write_data[0] = 0x05;
+    write_data[1] = 0xfa;
+    write_data[2] = 0xc0;
+    write_data[3] = 0x00;
+    write_data[4] = 0x00;
+    write_data[5] = 0x90;
+    write_data[6] = 0x01;
+    write_data[7] = 0x00;
+    write_data[8] = 0x10;
+    write_data[9] = 0x00;
+    i2c_write_data(addr,write_data,10);
+}
+
+void gtb_i2c_exit_idm(const uint8_t addr)
+{
+    uint8_t write_data[10] = {};
+    write_data[0] = 0x0a;
+    write_data[1] = 0xf5;
+    i2c_write_data(addr,write_data,2);
+}
+
+void gtb_i2c_start_cmd(const uint8_t addr)
+{
+    uint8_t write_data[10] = {};
+    write_data[0] = 0x05;
+    write_data[1] = 0xfa;
+    write_data[2] = 0xd0;
+    write_data[3] = 0x00;
+    write_data[4] = 0xff;
+    write_data[5] = 0xa0;
+    write_data[6] = 0x55;
+    write_data[7] = 0xaa;
+    write_data[8] = 0x66;
+    i2c_write_data(addr,write_data,9);
+}
+
+void gtb_i2c_idm_send(const uint8_t addr,const uint8_t *data, const uint8_t size)
+{
+    uint8_t write_data[10] = {};
+    write_data[0] = 0x05;
+    write_data[1] = 0xfa;
+    write_data[2] = 0xd0;
+    write_data[3] = 0x00;
+    for (uint8_t i = 0; i < size; i++)
+    {
+        write_data[4+i] = data[i];
+    }
+    i2c_write_data(addr,write_data,4+size);
+}
+
+void gtb_i2c_send_reg(const uint8_t addr,const uint8_t *data, const uint8_t size)
+{
+    uint8_t _data[10] = {};
+
+    gtb_i2c_start_cmd(addr);
+
+    _data[0] = 0xff;
+    _data[1] = 0xa0;
+    _data[2] = addr;
+    gtb_i2c_idm_send(addr,_data,3);
+
+    for (uint8_t i = 0; i < size; i++)
+    {
+        _data[i] = data[i];
+    }
+
+    gtb_i2c_idm_send(addr,_data,size);
+
+    gtb_i2c_start_cmd(addr);
+
+    _data[0] = 0xff;
+    _data[1] = 0x00;
+    _data[2] = 0x10;
+    gtb_i2c_idm_send(addr,_data,3);
+}
+
+void gtb_i2c_send_cmd(const uint8_t addr,const uint8_t data_0,const uint8_t data_1,const uint8_t data_2)
+{
+    uint8_t _data[10] = {};
+
+    _data[0] = data_0;
+    _data[1] = data_1;
+    _data[2] = data_2;
+
+    gtb_i2c_idm_send(addr,_data,3);
+}
+
+void gtb_i2c_read_reg(const uint8_t addr,const uint8_t cmd_0,const uint8_t cmd_1, uint8_t* read_data,const uint8_t size)
+{
+    uint8_t write_data[10] = {};
+    write_data[0] = 0x04;
+    write_data[1] = 0xfb;
+    write_data[2] = 0xd0;
+    write_data[3] = 0x00;
+    write_data[4] = cmd_0;
+    write_data[5] = cmd_1;
+    i2c_write_data(addr,write_data,6);
+    i2c_read_data(addr,read_data,size);
+}

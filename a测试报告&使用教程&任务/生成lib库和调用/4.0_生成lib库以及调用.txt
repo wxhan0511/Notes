@@ -1,0 +1,74 @@
+一、Keil 里把 Target 设为“生成静态库”
+在 MDK-ARM (uVision) 里做：
+
+新建一个专门的“库工程”（建议单独工程）
+加入你的源文件（GCGTMain.cpp、GCGTMain_c.cpp 等）
+打开 Options for Target（Alt+F7）
+在 Output 页：
+取消 Create Executable
+勾选 Create Library
+输出名填 GCGTMain.lib
+编译后会在 Objects（或你配置的输出目录）生成 GCGTMain.lib
+
+
+把这两个源文件加入库工程：
+GCGTMain.cpp
+以及你算法实现对应的 C++ 源文件（和 GCGTMain.h 配套的实现文件）。
+头文件包含路径加入：
+include
+
+只要c++文件
+
+在 Keil 里加头文件路径，按这个做就行：
+
+选中你的 Target
+打开 Project → Options for Target 'xxx'（快捷键 Alt+F7）
+进入 C/C++ 页签
+找到 Include Paths（或 “Include Paths for C/C++”）
+点右侧编辑按钮，把目录加进去，例如：
+include
+或绝对路径 include
+点 OK 保存
+
+STM32H743XI 的正确编译参数
+你是 H743XI（Cortex-M7，单精度 FPU），建议统一为：
+
+-mcpu=cortex-m7
+-mthumb
+-mfpu=fpv5-sp-d16
+-mfloat-abi=hard
+
+按 H743XI 设置 CPU/FPU（关键）
+
+Target 页面里 Core 选 Cortex-M7。
+FPU 选 Single Precision（fpv5-sp-d16）。
+Float ABI 选 Hard。
+Thumb mode 保持开启。
+优化可选 -Oz 或 -O2，建议先 -O1/-O2 调通再压缩。
+、先确认你用的是哪个编译器
+
+打开 Keil，进入 Project → Options for Target。
+在 Target 或 C/C++ 页面确认工具链是 Arm Compiler 6（armclang）。
+如果还是 ArmCC5，也能配，但建议统一 AC6，后续 C++ 库兼容更稳。
+二、在 Target 页面设置内核和 Thumb
+
+打开 Project → Options for Target → Target 页签。
+Device 选 STM32H743XI。
+Core 选 Cortex-M7。
+Instruction Set 选 Thumb（一般是默认开启）。
+这一步对应目标参数就是 M7 + Thumb。
+三、在浮点页面设置 FPU 和 ABI（最关键）
+
+打开 Options for Target → Target 页签。
+FPU 选择 Single Precision（FPv5-SP-D16）。
+Floating Point ABI 选择 Hard。
+如果页面里是 Use FPU 和 ABI 下拉框，确保是 SP + Hard 的组合。
+底层等价含义是：
+FPU: fpv5-sp-d16
+Float ABI: hard
+四、在 C/C++ 页面设置优化级别
+
+打开 Options for Target → C/C++ 页签。
+Optimization 先选 O1 或 O2（建议先 O1）。
+工程跑通后再改 Oz 压体积。
+Debug 阶段不要直接上 Oz，排查问题会困难。

@@ -1,0 +1,297 @@
+Set_ChannelName(9,0,DVDD);
+Set_ChannelName(12,0,VDDMA);
+Set_ChannelName(10,0,VCIP);
+Set_ChannelName(14,0,VGMP);
+Set_ChannelName(13,0,VGMN);
+Set_ChannelName(11,0,VCOM);
+Set_ChannelName(6,0,VGH);
+Set_ChannelName(7,0,VGL);
+Set_ChannelName(15,0,VGHO);
+Set_ChannelName(18,0,VGLO);
+Set_ChannelName(8,0,TVDD);
+Set_ChannelName(5,0,TESTP_L);
+Set_ChannelName(16,0,TESTP_R);
+int ChannelNUM[13]={9,12,10,14,13,11,6,7,15,18,8,5,16};
+
+Print("slpin");
+Delay(100);
+Get_PowerCurrent(3);
+Delay(100);
+Get_PowerCurrent(1);
+Delay(100);
+Get_PowerCurrent(0);
+
+Delay(1000);
+for (i = 0, i < 11, i++)
+{
+    Get_Voltage(ChannelNUM[i],0);
+}
+Delay(10);
+
+//TESTP_L输出VDDML
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xF8,0xAA);//ESD_ProtectDisable
+SSD_SEND(0x01,0xE5,0x02);//D2T_LF_TESTPL_SEL<3:0>=2
+Delay(1000);
+Get_Voltage(ChannelNUM[11],0);
+Delay(100);
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xE5,0x00);
+Delay(500);
+
+Get_PowerVoltage(3);//IOVCC
+Get_PowerVoltage(0);//VSN
+Get_PowerVoltage(1);//VSP
+Delay(10);
+
+
+Set_Frequency(1,17,800);
+Delay(10);
+
+//TP_OSC_no_tracking
+SSD_SEND(0x01,0xFF,0x20);
+SSD_SEND(0x01,0xDE,0x00,0x30);//OSCTRIM_NOR_A=1
+SSD_SEND(0x10,0xFF,0x22); // cmd2 page2 
+SSD_SEND(0x10,0xEA,0x30); 
+SSD_SEND(0x10,0xDC,0xEE); //[7:4]=FTE, [3:0]=FTE1 
+Delay(100);
+Get_Frequency(17);//硬件，第一遍测不到
+Delay(2000);
+Print("slpin_TP_osc_no_tracking");
+Get_Frequency(17);
+Delay(500);
+
+//VCO输出 不挂pllref的TP
+SSD_SEND(0x11,0xFF,0x26);
+SSD_SEND(0x01,0x27,0x65);//D2O LF PLL VCTRL TP EXT EN=1
+Delay(2000);
+Print("slpin_VCO输出 不挂pllref的TP");
+Get_Frequency(17);
+Delay(1000);
+
+SSD_SEND(0x11,0xFF,0x26);
+SSD_SEND(0x01,0x27,0x45);//D2O LF PLL VCTRL TP EXT EN=0
+Delay(100);
+
+SSD_SEND(0x10,0xFF,0x10);
+SSD_SEND(0x00,0x11);
+Delay(200);
+Print("slpout");
+Delay(100);
+Get_PowerCurrent(3);
+Delay(100);
+Get_PowerCurrent(1);
+Delay(100);
+Get_PowerCurrent(0);
+
+Delay(1000);
+for (i = 0, i < 11, i++)
+{
+    Get_Voltage(ChannelNUM[i],0);
+}
+Delay(10);
+
+//TESTP_L输出VDDML
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xF8,0xAA);//ESD_ProtectDisable
+SSD_SEND(0x01,0xE5,0x02);//D2T_LF_TESTPL_SEL<3:0>=2
+Delay(10);
+Get_Voltage(ChannelNUM[11],0);
+Delay(10);
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xE5,0x00);
+Delay(500);
+
+Get_PowerVoltage(3);//IOVCC
+Get_PowerVoltage(0);//VSN
+Get_PowerVoltage(1);//VSP
+Delay(10);
+
+
+Set_Frequency(1,17,800);
+//VCO输出 不挂pllref的TP
+SSD_SEND(0x11,0xFF,0x26);
+SSD_SEND(0x01,0x27,0x65);//D2O LF PLL VCTRL TP EXT EN=1
+SSD_SEND(0x01,0xFF,0x20);
+SSD_SEND(0x01,0xDE,0x00,0x30);//OSCTRIM_NOR_A=1
+SSD_SEND(0x10,0xFF,0x22); // cmd2 page2 
+SSD_SEND(0x10,0xEA,0x30); 
+SSD_SEND(0x10,0xDC,0xEE); //[7:4]=FTE, [3:0]=FTE1
+
+Delay(1000);
+Get_Frequency(17);
+Delay(1000);
+Print("slpout_VCO输出 不挂pllref的TP");
+Delay(2000);
+Get_Frequency(17);
+Delay(100);
+SSD_SEND(0x11,0xFF,0x26);
+SSD_SEND(0x01,0x27,0x45);
+
+//VCO输出 不挂pllref的DP
+SSD_SEND(0x10,0xFF,0xB3);
+SSD_SEND(0x10,0xD8,0x55);//D2O_LF_PLL_VCTRL_DP_EXT_EN=1
+//DP_CLK_OSC_no_tracking
+SSD_SEND(0x01,0xFF,0x20);
+SSD_SEND(0x01,0xDE,0x00,0x30);//OSCTRIM_NOR_A=1
+SSD_SEND(0x10,0xFF,0x22); // cmd2 page2 
+SSD_SEND(0x10,0xEA,0x00); 
+SSD_SEND(0x10,0xDC,0x77); //[7:4]=FTE, [3:0]=FTE1 
+Delay(1000);
+Print("slpout_VCO输出 不挂pllref的DP");
+Delay(2000);
+Get_Frequency(17);
+Delay(100);
+SSD_SEND(0x10,0xFF,0xB3);
+SSD_SEND(0x10,0xD8,0x54);
+Delay(100);
+
+SSD_SEND(0x10,0xFF,0x10);
+SSD_SEND(0x00,0x29); 
+Delay (120);
+SSD_MODE(0, 1);
+Video_START();
+
+Delay(100);
+Print("dispon");
+Delay(100);
+Print("红图");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+Delay(100);
+
+Next_Image();
+Delay(10);
+Print("绿图");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+Delay(100);
+
+Next_Image();
+Delay(10);
+Print("蓝图");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+Delay(100);
+
+Next_Image();
+Delay(10);
+Print("白图");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+Delay(100);
+
+Next_Image();
+Delay(10);
+Print("黑图");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+Delay(100);
+
+
+Next_Image();
+Delay(10);
+Print("灰阶过度");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+Delay(100);
+
+Next_Image();
+Delay(10);
+Print("彩图");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+
+Delay(1000);
+for (i = 0, i < 11, i++)
+{
+    Get_Voltage(ChannelNUM[i],0);
+}
+Delay(10);
+
+//TESTP_L输出VDDML
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xF8,0xAA);//ESD_ProtectDisable
+SSD_SEND(0x01,0xE5,0x02);//D2T_LF_TESTPL_SEL<3:0>=2
+Delay(1000);
+Get_Voltage(ChannelNUM[11],0);
+Delay(100);
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xE5,0x00);
+Delay(500);
+
+Get_PowerVoltage(3);//IOVCC
+Get_PowerVoltage(0);//VSN
+Get_PowerVoltage(1);//VSP
+Delay(10);
+
+Next_Image();
+Delay(10);
+Print("黑白行");
+Delay(100);
+Get_PowerCurrent(3);
+Get_PowerCurrent(1);
+Get_PowerCurrent(0);
+
+Delay(1000);
+for (i = 0, i < 11, i++)
+{
+    Get_Voltage(ChannelNUM[i],0);
+}
+Delay(10);
+
+//TESTP_L输出VDDML
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xF8,0xAA);//ESD_ProtectDisable
+SSD_SEND(0x01,0xE5,0x02);//D2T_LF_TESTPL_SEL<3:0>=2
+Delay(1000);
+Get_Voltage(ChannelNUM[11],0);
+Delay(100);
+SSD_SEND(0x01,0xFF,0xB3);
+SSD_SEND(0x01,0xE5,0x00);
+Delay(500);
+
+Get_PowerVoltage(3);//IOVCC
+Get_PowerVoltage(0);//VSN
+Get_PowerVoltage(1);//VSP
+Delay(10);
+
+Set_Frequency(1,17,800);
+//TP_OSC_no_tracking
+SSD_SEND(0x01,0xFF,0x20);
+SSD_SEND(0x01,0xDE,0x00,0x30);//OSCTRIM_NOR_A=1
+SSD_SEND(0x10,0xFF,0x22); // cmd2 page2 
+SSD_SEND(0x10,0xEA,0x30); 
+SSD_SEND(0x10,0xDC,0xEE); //[7:4]=FTE, [3:0]=FTE1 
+Delay(1000);
+Get_Frequency(17);
+Delay(2000);
+Print("dispon_TP_OSC_no_tracking");
+Delay(1000);
+Get_Frequency(17);
+Delay(100);
+//DP_OSC_no_tracking
+SSD_SEND(0x01,0xFF,0x20);
+SSD_SEND(0x01,0xDE,0x00,0x30);//OSCTRIM_NOR_A=1
+SSD_SEND(0x10,0xFF,0x22); // cmd2 page2 
+SSD_SEND(0x10,0xEA,0x00); 
+SSD_SEND(0x10,0xDC,0x77); //[7:4]=FTE, [3:0]=FTE1 
+Delay(1000);
+Print("dispon_DP_OSC_no_tracking");
+Delay(2000);
+Get_Frequency(17);
+Delay(100);

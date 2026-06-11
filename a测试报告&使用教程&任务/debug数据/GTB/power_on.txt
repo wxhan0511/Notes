@@ -1,0 +1,92 @@
+[RA_POWEREX][INFO] ================================================
+[RA_POWEREX][INFO] RA PowerEX Board System Information
+[RA_POWEREX][INFO] ================================================
+[RA_POWEREX][INFO] Firmware Name: RA PowerEX Board v1.0
+[RA_POWEREX][INFO] Software Version: 1.0.0.1
+[RA_POWEREX][INFO] Hardware Name: RA PowerEX Board
+[RA_POWEREX][INFO] Hardware Version: 1.0.0.1
+[RA_POWEREX][INFO] ================================================
+[RA_POWEREX][INFO] CRC init...
+[RA_POWEREX][INFO] CRC init success
+[RA_POWEREX][INFO] Loading calibration data from Flash...
+[RA_POWEREX][INFO] Calibration data loaded successfully (version: 1, timestamp: 95, CRC: 0x2136D61A)
+[RA_POWEREX][DEBUG] ADS1256 REG_STATUS:0x30
+[RA_POWEREX][DEBUG] ADS1256 REG_MUX:0x01
+[RA_POWEREX][DEBUG] ADS1256 REG_ADCON:0x20
+[RA_POWEREX][DEBUG] ADS1256 REG_DRATE:0xF0
+[RA_POWEREX][DEBUG] ADS1256 REG_IO:0xE1
+[RA_POWEREX][DEBUG] ADS1256 REG_STATUS:0xFF
+[RA_POWEREX][DEBUG] ADS1256 REG_STATUS:0xFF
+[RA_POWEREX][DEBUG] ADS1256 REG_MUX:0xFF
+[RA_POWEREX][DEBUG] ADS1256 REG_ADCON:0xFF
+[RA_POWEREX][DEBUG] ADS1256 REG_DRATE:0xFF
+[RA_POWEREX][DEBUG] ADS1256 REG_IO:0xFF
+[RA_POWEREX][INFO] ------------- bsp init ads1256 finish -------------
+[RA_POWEREX][INFO] ELVDD: 0.000000 mV
+[RA_POWEREX][INFO] ELVSS: 0.000000 mV
+[RA_POWEREX][INFO] IOVCC: 0.000000 mV
+[RA_POWEREX][INFO] VCC: 0.000000 mV
+[RA_POWEREX][INFO] xb_iovcc 0.000000mv
+[RA_POWEREX][INFO] vci 0.000000mv
+[RA_POWEREX][INFO] vsp 0.000000mv
+[RA_POWEREX][INFO] vsn 0.000000mv
+IOVCC set power failed
+VCI set power failed
+VSP set power failed
+VSN set power failed
+BSP error
+BSP error
+MVDD set power failed
+BSP error
+BSP error
+VDDIO set power failed
+[drv ra ops] main 0x40 vsn power off
+[drv ra ops] main 0x40 12v power off
+[drv ra ops] main 0x40 vsp power off
+[RA_POWEREX][DEBUG] VDDIO,MVDD,VSN,iovcc,VCI enabled, VSP disabled
+[RA_POWEREX][INFO] ------------- bsp init finish -------------
+[GTB INFO] [gtb task] active 
+HOST->DEVICE:40,f1,0,0,0,0,0,0,
+receive HID DATA:40,f1,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 175
+gtb_generic_com cmd: f1
+DEVICE->HOST:40,f1,1,0,2,7,0,0,
+HOST->DEVICE:40,f1,0,0,0,0,0,0,
+receive HID DATA:40,f1,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 175
+gtb_generic_com cmd: f1
+DEVICE->HOST:40,f1,1,0,2,7,0,0,
+HOST->DEVICE:40,f2,0,0,0,0,0,0,
+receive HID DATA:40,f2,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 187
+gtb_generic_com cmd: f2
+DEVICE->HOST:40,f2,1,0,0,0,0,0,
+HOST->DEVICE:40,f2,0,0,0,0,0,0,
+receive HID DATA:40,f2,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 187
+gtb_generic_com cmd: f2
+HOST->DEVICE:40,f0,1,0,0,0,0,0,
+receive HID DATA:40,f0,1,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 164
+gtb_generic_com cmd: f0
+HOST->DEVICE:40,f3,2,5,1,0,0,0,
+receive HID DATA:40,f3,2,5, enter gtb_generic_com
+HOST->DEVICE:40,f3,2,4,0,0,0,0,
+receive HID DATA:40,f3,2,4, enter gtb_generic_com
+HOST->DEVICE:40,f3,2,3,0,0,0,0,
+receive HID DATA:40,f3,2,3, enter gtb_generic_com
+HOST->DEVICE:40,f8,3,0,0,0,0,0,
+receive HID DATA:40,f8,3,0, enter gtb_generic_com
+HOST->DEVICE:40,fc,3,0,0,0,0,0,
+receive HID DATA:40,fc,3,0, enter gtb_generic_com
+HOST->DEVICE:40,fc,4,0,0,0,0,0,
+receive HID DATA:40,fc,4,0, enter gtb_generic_com
+HOST->DEVICE:40,e1,d0,1,0,0,0,0,
+receive HID DATA:40,e1,d0,1, enter gtb_generic_com
+DEVICE->HOST:40,e1,c0,0,0,0,0,0,
+HOST->DEVICE:40,e1,d0,1,0,0,0,0,
+receive HID DATA:40,e1,d0,1, enter gtb_generic_com
+DEVICE->HOST:40,e1,c0,0,0,0,0,0,
+HOST->DEVICE:40,e1,d0,1,0,0,0,0,
+receive HID DATA:40,e1,d0,1, enter gtb_generic_com
+DEVICE->HOST:40,e1,c0,0,0,0,0,0,

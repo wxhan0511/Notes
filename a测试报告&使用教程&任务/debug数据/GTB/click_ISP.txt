@@ -1,0 +1,10 @@
+HOST->DEVICE:40,f0,1,0,0,0,0,0,
+receive HID DATA:40,f0,1,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 164
+gtb_generic_com cmd: f0
+HOST->DEVICE:40,fd,ff,30,0,0,0,0,
+HOST->DEVICE:40,f3,0,0,0,0,0,0,
+receive HID DATA:40,f3,0,0, enter gtb_generic_com
+HOST->DEVICE:40,f3,0,1,0,0,0,0,
+HOST->DEVICE:40,f3,0,8,0,0,0,0,
+receive HID DATA:40,f3,0,8, enter gtb_generic_com

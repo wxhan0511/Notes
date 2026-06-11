@@ -35,7 +35,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">Software version</td>
-						<td colspan="5">1.0.0.6</td>
+						<td colspan="5">2.0.0.146</td>
 					</tr>
 					<tr>
 						<td colspan="2">Host</td>
@@ -47,7 +47,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">Time</td>
-						<td colspan="5">2025/12/26 10:08:14</td>
+						<td colspan="5">2026/6/11 11:33:08</td>
 					</tr>
 					<!-- <tr>
 						<td colspan="2">warnings</td>
@@ -770,57 +770,64 @@
 <entry> 
 <record>9</record>
 <item>InterfaceQSPI</item>
+<subitem>SDISelect</subitem>
+<value>0</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>10</record>
+<item>InterfaceQSPI</item>
 <subitem>EmptyPeriod1pixel</subitem>
 <value>0x08</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
-<record>10</record>
+<record>11</record>
 <item>InterfaceQSPI</item>
 <subitem>Cmdlinewidthpixel</subitem>
 <value>0</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
-<record>11</record>
+<record>12</record>
 <item>InterfaceQSPI</item>
 <subitem>EmptyPeriod2pixel</subitem>
 <value>0x08</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
-<record>12</record>
+<record>13</record>
+<item>InterfaceQSPI</item>
+<subitem>Datalinewidthpixel</subitem>
+<value>1</value><type>Information</type>
+<description>Display InterfaceQSPI Setting</description>
+</entry>
+<entry> 
+<record>14</record>
 <item>InterfaceQSPI</item>
 <subitem>Receivedelayen</subitem>
 <value>0</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
-<record>13</record>
+<record>15</record>
 <item>InterfaceQSPI</item>
 <subitem>Formatchoice</subitem>
 <value>0x01</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
-<record>14</record>
+<record>16</record>
 <item>InterfaceQSPI</item>
 <subitem>HeadPixel</subitem>
 <value>0x01</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
-<record>15</record>
+<record>17</record>
 <item>InterfaceQSPI</item>
 <subitem>HeadPixelset</subitem>
 <value>0x00</value><type>Information</type>
-<description>Display InterfaceQSPI Setting</description>
-</entry>
-<entry> 
-<record>16</record>
-<item>InterfaceQSPI</item>
-<subitem>Datalinewidthpixel</subitem>
-<value>1</value><type>Information</type>
 <description>Display InterfaceQSPI Setting</description>
 </entry>
 <entry> 
@@ -989,6 +996,13 @@
 <item>InterfaceMIPI</item>
 <subitem>COMP_SLICE</subitem>
 <value>0x01</value><type>Information</type>
+<description>Display InterfaceMIPI Setting</description>
+</entry>
+<entry> 
+<record>19</record>
+<item>InterfaceMIPI</item>
+<subitem>Formatchoice</subitem>
+<value>0</value><type>Information</type>
 <description>Display InterfaceMIPI Setting</description>
 </entry>
 </activity>

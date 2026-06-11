@@ -1,0 +1,44 @@
+HOST->DEVICE:40,f1,0,0,0,0,0,0,
+receive HID DATA:40,f1,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 175
+gtb_generic_com cmd: f1
+DEVICE->HOST:40,f1,1,0,2,7,0,0,
+HOST->DEVICE:40,f1,0,0,0,0,0,0,
+receive HID DATA:40,f1,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 175
+gtb_generic_com cmd: f1
+DEVICE->HOST:40,f1,1,0,2,7,0,0,
+HOST->DEVICE:40,f2,0,0,0,0,0,0,
+receive HID DATA:40,f2,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 187
+gtb_generic_com cmd: f2
+DEVICE->HOST:40,f2,1,0,0,0,0,0,
+HOST->DEVICE:40,f2,0,0,0,0,0,0,
+receive HID DATA:40,f2,0,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 187
+gtb_generic_com cmd: f2
+HOST->DEVICE:40,f0,1,0,0,0,0,0,
+receive HID DATA:40,f0,1,0, enter gtb_generic_com
+file: D:/Project/RA_PowerEX/gtb/src/gtb_com_mix.c, line: 164
+gtb_generic_com cmd: f0
+HOST->DEVICE:40,f3,2,5,1,0,0,0,
+receive HID DATA:40,f3,2,5, enter gtb_generic_com
+HOST->DEVICE:40,f3,2,4,0,0,0,0,
+receive HID DATA:40,f3,2,4, enter gtb_generic_com
+HOST->DEVICE:40,f3,2,3,0,0,0,0,
+receive HID DATA:40,f3,2,3, enter gtb_generic_com
+HOST->DEVICE:40,f8,3,0,0,0,0,0,
+receive HID DATA:40,f8,3,0, enter gtb_generic_com
+HOST->DEVICE:40,fc,3,0,0,0,0,0,
+receive HID DATA:40,fc,3,0, enter gtb_generic_com
+HOST->DEVICE:40,fc,4,0,0,0,0,0,
+receive HID DATA:40,fc,4,0, enter gtb_generic_com
+HOST->DEVICE:40,e1,d0,1,0,0,0,0,
+receive HID DATA:40,e1,d0,1, enter gtb_generic_com
+DEVICE->HOST:40,e1,c0,0,0,0,0,0,
+HOST->DEVICE:40,e1,d0,1,0,0,0,0,
+receive HID DATA:40,e1,d0,1, enter gtb_generic_com
+DEVICE->HOST:40,e1,c0,0,0,0,0,0,
+HOST->DEVICE:40,e1,d0,1,0,0,0,0,
+receive HID DATA:40,e1,d0,1, enter gtb_generic_com
+DEVICE->HOST:40,e1,c0,0,0,0,0,0,

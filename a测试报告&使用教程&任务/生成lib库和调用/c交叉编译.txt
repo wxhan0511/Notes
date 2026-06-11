@@ -1,0 +1,14 @@
+看各段总大小
+arm-none-eabi-nm --print-size --size-sort  .\ThirdParty\GCGTMain\lib\GCGTMain.o
+看哪个函数本体最大
+arm-none-eabi-nm --print-size --size-sort  .\ThirdParty\GCGTMain\lib\GCGTMain.o
+
+
+
+
+f103
+arm-none-eabi-gcc -c .\ThirdParty\GCGTMain\src\GammaTuning.c -I .\ThirdParty\GCGTMain\include -fno-short-enums -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -std=c11 -Os -fomit-frame-pointer -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -o .\ThirdParty\GCGTMain\lib\GCGTMain.o
+arm-none-eabi-ar rcs .\ThirdParty\GCGTMain\lib\GCGTMain.lib .\ThirdParty\GCGTMain\lib\GCGTMain.o
+
+
+注意: 魔法棒->C/C++(AC6) Short enums/wchar 不要勾选

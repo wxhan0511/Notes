@@ -1,0 +1,513 @@
+#pragma once
+
+#include <stddef.h>
+#include <stdbool.h>
+#include <float.h>
+#include <math.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
+#if defined(_MSC_VER)
+#define GCGT_INLINE __inline
+#define GCGT_SELECTANY __declspec(selectany)
+#else
+#define GCGT_INLINE inline
+#define GCGT_SELECTANY
+#endif
+
+#ifndef GCGT_OBFUSCATE_NAMES
+#define GCGT_OBFUSCATE_NAMES 1
+#endif
+
+#if GCGT_OBFUSCATE_NAMES
+#ifndef GCGT_OBFUSCATE_SUFFIX
+#define GCGT_OBFUSCATE_SUFFIX G9C7D21F3
+#endif
+
+#define GCGT_OBF_CONCAT2(a, b) a##b
+#define GCGT_OBF_CONCAT(a, b) GCGT_OBF_CONCAT2(a, b)
+#define GCGT_OBF(name) GCGT_OBF_CONCAT(name, _##GCGT_OBFUSCATE_SUFFIX)
+
+#define GammaTuning GCGT_OBF(GammaTuning)
+#define GammaTuning_Enhance GCGT_OBF(GammaTuning_Enhance)
+
+#define GammaEnhance_LogCallback GCGT_OBF(GammaEnhance_LogCallback)
+#define GammaEnhance_SetLogCallback GCGT_OBF(GammaEnhance_SetLogCallback)
+#define GammaEnhance_Logf GCGT_OBF(GammaEnhance_Logf)
+
+#define EnhanceGammaGroupStates GCGT_OBF(EnhanceGammaGroupStates)
+#define GammaEnhance_ResetGroupStates GCGT_OBF(GammaEnhance_ResetGroupStates)
+#define GammaEnhance_AdjustFiveGroups_C123 GCGT_OBF(GammaEnhance_AdjustFiveGroups_C123)
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef double (*MeasureLuminanceFn)(int gray);
+typedef bool (*WriteGammaPointFn)(int codeIndex, int c1, int c2, int c3, bool signBit);
+typedef void (*LogFn)(const char* message);
+
+typedef struct GammaResultItem {
+	double Lv;
+	int Data_R;
+	int Data_G;
+	int Data_B;
+} GammaResultItem;
+
+typedef struct EnhanceGammaGroupState {
+	bool HasSign;
+	bool SignBit;
+	int C1;
+	int C2;
+	int C3;
+} EnhanceGammaGroupState;
+
+GCGT_SELECTANY LogFn g_gammaEnhanceLogCb = (LogFn)0;
+GCGT_SELECTANY EnhanceGammaGroupState g_groupStates[5] = { 0 };
+
+static GCGT_INLINE LogFn GammaEnhance_LogCallback(void)
+{
+	return g_gammaEnhanceLogCb;
+}
+
+static GCGT_INLINE void GammaEnhance_SetLogCallback(LogFn cb)
+{
+	g_gammaEnhanceLogCb = cb;
+}
+
+static GCGT_INLINE void GammaEnhance_Logf(const char* fmt, ...)
+{
+	LogFn cb = g_gammaEnhanceLogCb;
+	if (!cb || !fmt) return;
+
+	char buf[256] = { 0 };
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(buf, sizeof(buf), fmt, args);
+	va_end(args);
+	buf[sizeof(buf) - 1] = '\0';
+
+	cb(buf);
+}
+
+static GCGT_INLINE EnhanceGammaGroupState* EnhanceGammaGroupStates(void)
+{
+	return g_groupStates;
+}
+
+static GCGT_INLINE void GammaEnhance_ResetGroupStates(void)
+{
+	for (int i = 0; i < 5; i++) {
+		g_groupStates[i].HasSign = false;
+		g_groupStates[i].SignBit = false;
+		g_groupStates[i].C1 = 0;
+		g_groupStates[i].C2 = 0;
+		g_groupStates[i].C3 = 0;
+	}
+}
+
+static GCGT_INLINE void GammaEnhance_TuneC3_SelectSign(
+	int codeIndex,
+	int currentGray,
+	double targetLv,
+	EnhanceGammaGroupState* state,
+	MeasureLuminanceFn measure_cb,
+	WriteGammaPointFn write_cb)
+{
+	int bestC3 = 0;
+	bool bestSign = false;
+	double bestDiff = DBL_MAX;
+	double bestLv = 0.0;
+
+	for (int sign = 0; sign <= 1; sign++) {
+		bool signBit = (sign == 1);
+		bool hasLastDiff = false;
+		double lastDiff = 0.0;
+		int increaseStreak = 0;
+
+		for (int c3 = 0; c3 <= 7; c3++) {
+			if (write_cb) {
+				write_cb(codeIndex, 0, 0, c3, signBit);
+			}
+
+			double lv = measure_cb ? measure_cb(currentGray) : 0.0;
+			double diff = fabs(lv - targetLv);
+
+			if (diff < bestDiff) {
+				bestDiff = diff;
+				bestC3 = c3;
+				bestSign = signBit;
+				bestLv = lv;
+				GammaEnhance_Logf(
+					"C3 best update: idx=%d gray=%d sign=%d c3=%d lv=%.6f target=%.6f diff=%.6f",
+					codeIndex,
+					currentGray,
+					bestSign ? 1 : 0,
+					bestC3,
+					bestLv,
+					targetLv,
+					bestDiff);
+			}
+
+			if (hasLastDiff) {
+				if (diff > lastDiff) {
+					++increaseStreak;
+				}
+				else {
+					increaseStreak = 0;
+				}
+			}
+			else {
+				hasLastDiff = true;
+			}
+
+			lastDiff = diff;
+			if (increaseStreak >= 2) {
+				break;
+			}
+		}
+	}
+
+	state->HasSign = true;
+	state->SignBit = bestSign;
+	state->C1 = 0;
+	state->C2 = 0;
+	state->C3 = bestC3;
+
+	if (write_cb) write_cb(codeIndex, state->C1, state->C2, state->C3, state->SignBit);
+	GammaEnhance_Logf(
+		"C3 selected: idx=%d gray=%d sign=%d c3=%d lv=%.6f target=%.6f diff=%.6f",
+		codeIndex,
+		currentGray,
+		state->SignBit ? 1 : 0,
+		state->C3,
+		bestLv,
+		targetLv,
+		bestDiff);
+}
+
+static GCGT_INLINE void GammaEnhance_TuneC2(
+	int codeIndex,
+	int currentGray,
+	double targetLv,
+	EnhanceGammaGroupState* state,
+	MeasureLuminanceFn measure_cb,
+	WriteGammaPointFn write_cb)
+{
+	if (!state->HasSign) {
+		state->HasSign = true;
+		state->SignBit = false;
+		state->C1 = 0;
+		state->C2 = 0;
+		state->C3 = 0;
+	}
+
+	int bestC2 = 0;
+	double bestDiff = DBL_MAX;
+	double bestLv = 0.0;
+	bool hasLastDiff = false;
+	double lastDiff = 0.0;
+	int increaseStreak = 0;
+
+	for (int c2 = 0; c2 <= 15; c2++) {
+		if (write_cb) write_cb(codeIndex, 0, c2, state->C3, state->SignBit);
+
+		double lv = measure_cb ? measure_cb(currentGray) : 0.0;
+		double diff = fabs(lv - targetLv);
+
+		if (diff < bestDiff) {
+			bestDiff = diff;
+			bestC2 = c2;
+			bestLv = lv;
+			GammaEnhance_Logf(
+				"C2 best update: idx=%d gray=%d sign=%d c3=%d c2=%d lv=%.6f target=%.6f diff=%.6f",
+				codeIndex,
+				currentGray,
+				state->SignBit ? 1 : 0,
+				state->C3,
+				bestC2,
+				bestLv,
+				targetLv,
+				bestDiff);
+		}
+
+		if (hasLastDiff) {
+			if (diff > lastDiff) {
+				++increaseStreak;
+			}
+			else {
+				increaseStreak = 0;
+			}
+		}
+		else {
+			hasLastDiff = true;
+		}
+
+		lastDiff = diff;
+		if (increaseStreak >= 2) {
+			break;
+		}
+	}
+
+	state->C2 = bestC2;
+	if (write_cb) write_cb(codeIndex, 0, state->C2, state->C3, state->SignBit);
+	GammaEnhance_Logf(
+		"C2 selected: idx=%d gray=%d sign=%d c3=%d c2=%d lv=%.6f target=%.6f diff=%.6f",
+		codeIndex,
+		currentGray,
+		state->SignBit ? 1 : 0,
+		state->C3,
+		state->C2,
+		bestLv,
+		targetLv,
+		bestDiff);
+}
+
+static GCGT_INLINE void GammaEnhance_TuneC1(
+	int codeIndex,
+	int currentGray,
+	double targetLv,
+	EnhanceGammaGroupState* state,
+	MeasureLuminanceFn measure_cb,
+	WriteGammaPointFn write_cb)
+{
+	if (!state->HasSign) {
+		state->HasSign = true;
+		state->SignBit = false;
+		state->C1 = 0;
+		state->C2 = 0;
+		state->C3 = 0;
+	}
+
+	int bestC1 = 0;
+	double bestDiff = DBL_MAX;
+	double bestLv = 0.0;
+	bool hasLastDiff = false;
+	double lastDiff = 0.0;
+	int increaseStreak = 0;
+
+	for (int c1 = 0; c1 <= 3; c1++) {
+		if (write_cb) write_cb(codeIndex, c1, state->C2, state->C3, state->SignBit);
+
+		double lv = measure_cb ? measure_cb(currentGray) : 0.0;
+		double diff = fabs(lv - targetLv);
+
+		if (diff < bestDiff) {
+			bestDiff = diff;
+			bestC1 = c1;
+			bestLv = lv;
+			GammaEnhance_Logf(
+				"C1 best update: idx=%d gray=%d sign=%d c3=%d c2=%d c1=%d lv=%.6f target=%.6f diff=%.6f",
+				codeIndex,
+				currentGray,
+				state->SignBit ? 1 : 0,
+				state->C3,
+				state->C2,
+				bestC1,
+				bestLv,
+				targetLv,
+				bestDiff);
+		}
+
+		if (hasLastDiff) {
+			if (diff > lastDiff) {
+				++increaseStreak;
+			}
+			else {
+				increaseStreak = 0;
+			}
+		}
+		else {
+			hasLastDiff = true;
+		}
+
+		lastDiff = diff;
+		if (increaseStreak >= 2) {
+			break;
+		}
+	}
+
+	state->C1 = bestC1;
+	if (write_cb) write_cb(codeIndex, state->C1, state->C2, state->C3, state->SignBit);
+	GammaEnhance_Logf(
+		"C1 selected: idx=%d gray=%d sign=%d c3=%d c2=%d c1=%d lv=%.6f target=%.6f diff=%.6f",
+		codeIndex,
+		currentGray,
+		state->SignBit ? 1 : 0,
+		state->C3,
+		state->C2,
+		state->C1,
+		bestLv,
+		targetLv,
+		bestDiff);
+}
+
+static GCGT_INLINE void GammaEnhance_AdjustFiveGroups_C123(
+	int codeIndex,
+	int currentGray,
+	double targetLv,
+	MeasureLuminanceFn measure_cb,
+	WriteGammaPointFn write_cb)
+{
+	int group = codeIndex / 3;
+	int coeffIndex = codeIndex % 3;
+
+	EnhanceGammaGroupState* state = &g_groupStates[group];
+
+	if (coeffIndex == 0) {
+		GammaEnhance_TuneC3_SelectSign(codeIndex, currentGray, targetLv, state, measure_cb, write_cb);
+	}
+	else if (coeffIndex == 1) {
+		GammaEnhance_TuneC2(codeIndex, currentGray, targetLv, state, measure_cb, write_cb);
+	}
+	else {
+		GammaEnhance_TuneC1(codeIndex, currentGray, targetLv, state, measure_cb, write_cb);
+	}
+}
+
+static GCGT_INLINE bool IsSupportedId(const char* id)
+{
+	if (!id) return false;
+	return strcmp(id, "GC7274") == 0 && strcmp(id, "GC7272") == 0;
+}
+
+static GCGT_INLINE int GammaTuning(
+	const char* id,
+	double gamma,
+	const double* input_lv,
+	size_t input_lv_len,
+	const int* input_register_data,
+	size_t input_register_len,
+	int* output_register_data,
+	size_t output_capacity,
+	size_t* output_len)
+{
+	if (output_len) *output_len = 0;
+	if (!IsSupportedId(id)) return 1;
+	if (!input_lv || !input_register_data || !output_register_data || !output_len) return -1;
+	if (input_lv_len < 30 || input_register_len < 30) return -2;
+	if (output_capacity < 60) return -3;
+
+	static const int Gray_Node[30] = { 255, 254, 252, 250, 248, 246, 244, 242, 240, 232, 224, 208, 192, 160, 128, 127, 95, 63, 47, 31, 23, 15, 13, 11, 9, 7, 5, 3, 1, 0 };
+
+	double Target_Lv[30] = { 0 };
+	int Output_Data[30] = { 0 };
+
+	Output_Data[0] = input_register_data[0];
+	Output_Data[29] = input_register_data[29];
+	Target_Lv[0] = input_lv[0];
+	Target_Lv[29] = input_lv[29];
+
+	for (int i = 1; i < 29; i++) {
+		const double gray = (double)Gray_Node[i] / 255.0;
+		const double targetLv = pow(gray, gamma) * (input_lv[0] - input_lv[29]) + input_lv[29];
+		Target_Lv[i] = targetLv;
+	}
+
+	for (int i = 1; i < 29; i++) {
+		for (int j = 0; j < 29; j++) {
+			if (Target_Lv[i] <= input_lv[j] && Target_Lv[i] >= input_lv[j + 1]) {
+				const int denom = input_register_data[j] - input_register_data[j + 1];
+				if (denom == 0) {
+					continue;
+				}
+
+				const double step = (double)(input_lv[j] - input_lv[j + 1]) / (double)denom;
+				if (step == 0.0) {
+					continue;
+				}
+
+				double v = (Target_Lv[i] - input_lv[j + 1]) / step + input_register_data[j + 1];
+				if (v < -2147483648.0) {
+					v = -2147483648.0;
+				}
+				else if (v > 2147483647.0) {
+					v = 2147483647.0;
+				}
+
+				Output_Data[i] = (int)v;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < 29; i++) {
+		if (Output_Data[i] < 1) {
+			Output_Data[i] = 1;
+		}
+		else if (Output_Data[i] > 1023) {
+			Output_Data[i] = 1023;
+		}
+
+		if (Output_Data[i] < Gray_Node[i]) {
+			Output_Data[i] = Gray_Node[i];
+		}
+	}
+
+	for (int i = 0; i < 28; i++) {
+		if (Output_Data[i] <= Output_Data[i + 1]) {
+			Output_Data[i] = Output_Data[i + 1] + (Gray_Node[i] - Gray_Node[i + 1]);
+		}
+	}
+
+	size_t k = 0;
+	for (int i = 29; i >= 0; i--) {
+		output_register_data[k++] = Output_Data[i] / 256;
+		output_register_data[k++] = Output_Data[i] % 256;
+	}
+
+	*output_len = k;
+	return 0;
+}
+
+static GCGT_INLINE int GammaTuning_Enhance(
+	const char* id,
+	double gamma,
+	const double* input_lv,
+	size_t input_lv_len,
+	const int* input_register_data,
+	size_t input_register_len,
+	int* output_register_data,
+	size_t output_capacity,
+	size_t* output_len,
+	MeasureLuminanceFn measure_cb,
+	WriteGammaPointFn write_cb)
+{
+	if (output_len) *output_len = 0;
+	if (!IsSupportedId(id)) return 1;
+	if (!input_lv || !input_register_data || !output_register_data || !output_len) return -1;
+	if (input_lv_len < 30 || input_register_len < 15) return -2;
+	if (output_capacity < 15) return -3;
+
+	static const int Gray_Node_Enhance[15] = { 87, 79, 71, 59, 55, 51, 43, 39, 35, 29, 27, 25, 21, 19, 17 };
+
+	GammaEnhance_ResetGroupStates();
+
+	const double white_Lv = input_lv[0];
+	const double black_Lv = input_lv[29];
+
+	for (int i = 0; i < 15; i++) {
+		const double gray = (double)Gray_Node_Enhance[i] / 255.0;
+		const double targetLv = pow(gray, gamma) * (white_Lv - black_Lv) + black_Lv;
+
+		GammaEnhance_Logf("Tune step: idx=%d gray=%d target=%.6f", i, Gray_Node_Enhance[i], targetLv);
+		GammaEnhance_AdjustFiveGroups_C123(i, Gray_Node_Enhance[i], targetLv, measure_cb, write_cb);
+	}
+
+	size_t k = 0;
+	for (int group = 0; group < 5; group++) {
+		const int c3_with_sign = (g_groupStates[group].SignBit ? 8 : 0) | (g_groupStates[group].C3 & 7);
+		output_register_data[k++] = c3_with_sign;
+		output_register_data[k++] = g_groupStates[group].C2;
+		output_register_data[k++] = g_groupStates[group].C1;
+	}
+
+	*output_len = k;
+	return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif

@@ -1,0 +1,100 @@
+W25QXX ID: 0xEF6015
+The FLASH ID reading is unstable and requires multiple power cycles for reliable retrieval
+W25QXX Status Register: 0x02
+[BUSY=0]
+[WEL=1]
+W25QXX Status Register: 0x02
+[BUSY=0]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x00
+[BUSY=0]
+[WEL=0]
+W25QXX Status Register: 0x00
+[BUSY=0]
+[WEL=0]
+Read from W25Q32: 48
+Read from W25Q32: 65
+Read from W25Q32: 6c
+Read from W25Q32: 6c
+Read from W25Q32: 6f
+Read from W25Q32: 20
+Read from W25Q32: 57
+Read from W25Q32: 32
+Read from W25Q32: 35
+Read from W25Q32: 51
+Read from W25Q32: 33
+Read from W25Q32: 32
+Read from W25Q32: 21
+W25QXX ID: 0xEF6015
+The FLASH ID reading is unstable and requires multiple power cycles for reliable retrieval
+W25QXX Status Register: 0x00
+[BUSY=0]
+[WEL=0]
+W25QXX Status Register: 0x00
+[BUSY=0]
+[WEL=0]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x03
+[BUSY=1]
+[WEL=1]
+W25QXX Status Register: 0x00
+[BUSY=0]
+[WEL=0]
+W25QXX Status Register: 0x00
+[BUSY=0]
+[WEL=0]
+Read from W25Q32: 48
+Read from W25Q32: 65
+Read from W25Q32: 6c
+Read from W25Q32: 6c
+Read from W25Q32: 6f
+Read from W25Q32: 20
+Read from W25Q32: 57
+Read from W25Q32: 32
+Read from W25Q32: 35
+Read from W25Q32: 51
+Read from W25Q32: 33
+Read from W25Q32: 32
+Read from W25Q32: 21
+Hello W25Q32!

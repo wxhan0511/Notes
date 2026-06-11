@@ -1,0 +1,7 @@
+cython
+hidapi
+numpy
+PySide6
+pyserial
+requests
+selenium
